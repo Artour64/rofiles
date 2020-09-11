@@ -17,25 +17,25 @@ dmenu="rofi -i -dmenu"
 mmOptions="navigate/open,navigate,run_sh,xdg_open,nano,gedit,rofi_view_file,shell,exit"
 #mmPlanned="copy,move"
 
-helpMsg="
-configs override defaults, options override configs\n\n
+helpMsg="\
+configs override defaults, options override configs
 
-for options that are boolean (true/false),\n\
-use capital letter to do the opposite\n\
-e.g. -a shows hidden files, -A hides hidden files, i.e. opposites\n\n\
+for options that are boolean (true/false),
+use capital letter to do the opposite
+e.g. -a shows hidden files, -A hides hidden files, i.e. opposites
 
-for options that require you to specify something,\n\
-use the argument after to specify\n\
-e.g. -s zsh will set shell to zsh\n\n\
+for options that require you to specify something,
+use the argument after to specify
+e.g. -s zsh will set shell to zsh
 
-rofiles options:\n
- -h : show the help text and exit\n
- -a : show hidden files\n
- -e : open terminal apps in seperate terminal\n
- -d : with -e option, terminal apps are detached (termapp params & disown)\n
- -q : escape key on main menu exits the program\n
- -t : with -e option, what terminal emulator to use for terminal apps\n
- -s : shell (bash,zsh,dash,etc) to use for the 'shell' menu option\n
+rofiles options:
+ -h : show the help text and exit
+ -a : show hidden files
+ -e : open terminal apps in seperate terminal
+ -d : with -e option, terminal apps are detached (termapp params & disown)
+ -q : escape key on main menu exits the program
+ -t : with -e option, what terminal emulator to use for terminal apps
+ -s : shell (bash,zsh,dash,etc) to use for the 'shell' menu option
 "
 
 if test -d "$configs"; then
@@ -46,7 +46,7 @@ fi
 
 while [ -n "$1" ]; do
 	case "$1" in
-		-h) echo -e $helpMsg;exit ;;
+		-h) echo "$helpMsg";exit ;;
 		
 		-e) hasTerm=false ;;
 		-E) hasTerm=true ;;
@@ -70,15 +70,15 @@ done
 
 menusel(){
 	if [ $p = true ]; then
-		(while read -r x; do echo $x; done) | $dmenu -p "$@ $a $dir"
+		(while read -r x; do echo "$x"; done) | $dmenu -p "$@ $a $dir"
 	else
-		(while read -r x; do echo $x; done) | $dmenu
+		(while read -r x; do echo "$x"; done) | $dmenu
 	fi
 }
 
 numberline() {
 	c=1;
-    if [ $# = 0 ] ; then
+    if [ "$#" = 0 ] ; then
         while read -r line ; do
             echo "$c"_"${line}"
             c=$((c+1))
@@ -87,11 +87,11 @@ numberline() {
 }
 
 termapp() {
-	if [ $hasTerm = true ];then
+	if [ "$hasTerm" = true ];then
 		$1 $2
 	else
-		if [ $termAppDisown = true ];then
-			$term $1 $2 & disown
+		if [ "$termAppDisown" = true ];then
+			nohup $term $1 $2 &
 		else
 			$term $1 $2
 		fi
@@ -107,7 +107,7 @@ navopencmd(){
 		elif test -d "$f"; then
 			eval cd "\""$f"\""
 		elif test -f "$f"; then
-			eval xdg-open 2>/dev/null "\""$f"\"" > /dev/null & disown
+			eval nohup xdg-open 2>/dev/null "\""$f"\"" > /dev/null &
 		fi
 		dir=$(pwd)
 	done
@@ -115,7 +115,7 @@ navopencmd(){
 
 navigatecmd() {
 	while true; do
-		dir=$( (echo .. && ls $a 2>/dev/null -p | grep "/" | cut -f1 -d'/') | menusel "navigate")
+		dir=$( (echo .. && ls "$a" 2>/dev/null -p | grep "/" | cut -f1 -d'/') | menusel "navigate")
 		if [ -z "$dir" ];then
 			dir=$(pwd)
 			break
@@ -158,7 +158,7 @@ while [ $running = true ];do
 	elif [ "$mm" = xdg_open ];then
 		f=$( (echo . && ls $a) | menusel "xdg_open" )
 		if [ -n "$f" ]; then
-			eval xdg-open 2>/dev/null "\""$f"\"" > /dev/null & disown
+			eval nohup xdg-open 2>/dev/null "\""$f"\"" > /dev/null &
 		fi
 	elif [ "$mm" = nano ];then
 		f=$(ls $a -p | grep -v / | menusel "nano")
@@ -168,7 +168,7 @@ while [ $running = true ];do
 	elif [ "$mm" = gedit ];then
 		f=$(ls $a -p | grep -v / | menusel "gedit")
 		if [ -n "$f" ]; then
-			gedit $f > /dev/null & disown
+			nohup gedit $f > /dev/null &
 		fi
 	elif [ "$mm" = rofi_view_file ];then
 		f=$(ls $a -p | grep -v / | menusel "rofi_view_file")
