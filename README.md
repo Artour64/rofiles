@@ -2,16 +2,16 @@
 a file manager written in dash shell script and uses rofi/dmenu for most of it's interface
 
 ## Want to use actual dmenu instead of rofi
-add this to the config.sh:
+add this to the config.sh:  
 dmenu=dmenu
 
 ## config
-default config-directory: ~/.config/rofiles
+default config-directory: ~/.config/rofiles  
 config-directory/config.sh is where you override default values. It is run as a shell script.
 
 ### config variables
-the variables that can be set in config-directory/config.sh
-format: variable (default/other-options) description
+The variables that can be set in config-directory/config.sh  
+Format: variable (default/other-options) description  
  - hasTerm (true/false) false to open a new terminal emulator when running a terminal app
  - termAppDisown (false/true) true to detach/disown new terminal emulators opened by this program
  - a (""/"-A") "-A" to show hidden files
