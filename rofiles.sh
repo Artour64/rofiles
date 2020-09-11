@@ -14,6 +14,9 @@ p=true
 dmenu="rofi -i -dmenu"
 #quiet=true
 
+mmOptions="navigate/open,navigate,run_sh,xdg_open,nano,gedit,rofi_view_file,shell,exit"
+#mmPlanned="copy,move"
+
 helpMsg="
 configs override defaults, options override configs\n\n
 
@@ -34,9 +37,6 @@ rofiles options:\n
  -t : with -e option, what terminal emulator to use for terminal apps\n
  -s : shell (bash,zsh,dash,etc) to use for the 'shell' menu option\n
 "
-
-mmOptions="navigate/open,navigate,run_sh,xdg_open,nano,gedit,rofi_view_file,shell,exit"
-mmPlanned="copy,move,nav/open"
 
 if test -d "$configs"; then
 	if test -f "$configs/config.sh"; then
