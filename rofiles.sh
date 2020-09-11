@@ -8,6 +8,7 @@ a=""
 qExit=false
 running=true
 term=kitty
+#term=x-terminal-emulator
 shell=bash
 p=true
 dmenu="rofi -i -dmenu"
@@ -19,6 +20,11 @@ configs override defaults, options override configs\n\n
 for options that are boolean (true/false),\n\
 use capital letter to do the opposite\n\
 e.g. -a shows hidden files, -A hides hidden files, i.e. opposites\n\n\
+
+for options that require you to specify something,\n\
+use the argument after to specify\n\
+e.g. -s zsh will set shell to zsh\n\n\
+
 rofiles options:\n
  -h : show the help text and exit\n
  -a : show hidden files\n
@@ -29,8 +35,8 @@ rofiles options:\n
  -s : shell (bash,zsh,dash,etc) to use for the 'shell' menu option\n
 "
 
-mmOptions="navigate,run_sh,xdg_open,nano,gedit,rofi_view_file,shell,exit"
-mmPlanned="copy,move"
+mmOptions="navigate/open,navigate,run_sh,xdg_open,nano,gedit,rofi_view_file,shell,exit"
+mmPlanned="copy,move,nav/open"
 
 if test -d "$configs"; then
 	if test -f "$configs/config.sh"; then
@@ -72,7 +78,7 @@ menusel(){
 
 numberline() {
 	c=1;
-    if (( ${#} == 0 )) ; then
+    if [ $# = 0 ] ; then
         while read -r line ; do
             echo "$c"_"${line}"
             c=$((c+1))
@@ -90,6 +96,33 @@ termapp() {
 			$term $1 $2
 		fi
 	fi
+}
+
+navopencmd(){
+	while true; do
+		f=$( (echo .. && ls $a 2>/dev/null -p) | menusel "navigate/open")
+		if [ -z "$f" ];then
+			dir=$(pwd)
+			break
+		elif test -d "$f"; then
+			eval cd "\""$f"\""
+		elif test -f "$f"; then
+			eval xdg-open 2>/dev/null "\""$f"\"" > /dev/null & disown
+		fi
+		dir=$(pwd)
+	done
+}
+
+navigatecmd() {
+	while true; do
+		dir=$( (echo .. && ls $a 2>/dev/null -p | grep "/" | cut -f1 -d'/') | menusel "navigate")
+		if [ -z "$dir" ];then
+			dir=$(pwd)
+			break
+		fi
+		eval cd "\""$dir"\""
+		dir=$(pwd)
+	done
 }
 
 #function guiapp {
@@ -112,20 +145,12 @@ while [ $running = true ];do
  		if [ $qExit = true ];then
 			running=false
 		fi
- 	elif [ "$mm" = navigate ];then
- 		while true; do
-			dir=$( ( echo .. && ls $a 2>/dev/null -p | grep / | cut -f1 -d'/') | menusel "navigate")
-			if [ -z "$dir" ];then
-				dir=$(pwd)
-				break
-			fi
-			eval cd "\""$dir"\""
-			if [ $dir = ".." ];then
-				dir=$(pwd)
-			fi
-		done
+ 	elif [ "$mm" = "navigate" ];then
+ 		navigatecmd
+ 	elif [ "$mm" = "navigate/open" ];then
+ 		navopencmd
 	elif [ "$mm" = run_sh ];then
-		f=$( ls $a -l | grep ^-..x..x..x.*\.sh$ | rev | cut -d ' ' -f1 | rev | menusel "run_sh" )
+		f=$( ls $a -l | grep "^-..x..x..x.*\.sh$" | rev | cut -d ' ' -f1 | rev | menusel "run_sh" )
 		if [ -n "$f" ]; then
 			./$f
 		fi
@@ -159,7 +184,5 @@ while [ $running = true ];do
 		a=""
 	elif [ "$mm" = exit ];then
 		running=false
-	else
-		echo main menu
 	fi
 done
