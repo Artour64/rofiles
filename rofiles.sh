@@ -140,7 +140,7 @@ while [ $running = true ];do
 	else
 		aStr="show_hidden_files"
 	fi
- 	mm=$(echo $mmOptions,$aStr | tr ',' '\n' | numberline | menusel "main_menu" | sed 's/^..//')
+ 	mm=$(echo $mmOptions,$aStr | tr ',' '\n' | numberline | menusel "main_menu" | sed 's/^[0-9]*_//')
  	if [ -z "$mm" ];then
  		if [ $qExit = true ];then
 			running=false
