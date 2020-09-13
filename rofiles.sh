@@ -18,13 +18,13 @@ mmOptions="navigate/open,navigate,run_sh,xdg_open,nano,gedit,rofi_view_file,shel
 #mmPlanned="copy,move"
 
 helpMsg="\
-configs override defaults, options override configs
+Configs override defaults, options override configs
 
-for options that are boolean (true/false),
+For options that are boolean (true/false),
 use capital letter to do the opposite
 e.g. -a shows hidden files, -A hides hidden files, i.e. opposites
 
-for options that require you to specify something,
+For options that require you to specify something,
 use the argument after to specify
 e.g. -s zsh will set shell to zsh
 
@@ -35,14 +35,20 @@ rofiles options:
  -d : with -e option, terminal apps are detached (termapp params & disown)
  -q : escape key on main menu exits the program
  -t : with -e option, what terminal emulator to use for terminal apps
- -s : shell (bash,zsh,dash,etc) to use for the 'shell' menu option
+ -s : shell (bash,zsh,dash,etc) to use for the 'shell' menu option\
 "
-
-if test -d "$configs"; then
-	if test -f "$configs/config.sh"; then
-		. $configs/config.sh
+loadconfig(){
+	if test -d "$configs"; then
+		if test -f "$configs/config.sh"; then
+			. $configs/config.sh
+		fi
+		if test -f "$configs/help.txt"; then
+			helpMsg=$(cat $configs/help.txt)
+		fi
 	fi
-fi
+}
+
+loadconfig
 
 while [ -n "$1" ]; do
 	case "$1" in
@@ -115,7 +121,7 @@ navopencmd(){
 
 navigatecmd() {
 	while true; do
-		dir=$( (echo .. && ls "$a" 2>/dev/null -p | grep "/" | cut -f1 -d'/') | menusel "navigate")
+		dir=$( (echo .. && ls $a 2>/dev/null -p | grep "/" | cut -f1 -d'/') | menusel "navigate")
 		if [ -z "$dir" ];then
 			dir=$(pwd)
 			break
@@ -123,6 +129,14 @@ navigatecmd() {
 		eval cd "\""$dir"\""
 		dir=$(pwd)
 	done
+}
+
+customfun() {
+	if test -d "$configs/functions"; then
+		if test -f "$configs/functions/$mm"; then
+			. $configs/functions/$mm
+		fi
+	fi
 }
 
 #function guiapp {
@@ -184,5 +198,7 @@ while [ $running = true ];do
 		a=""
 	elif [ "$mm" = exit ];then
 		running=false
+	else
+		customfun "$mm"
 	fi
 done
