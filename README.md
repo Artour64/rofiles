@@ -3,9 +3,12 @@ a file manager written in dash shell script and uses rofi/dmenu for most of it's
 
 ## Config
 default config-directory: ~/.config/rofiles  
-config-directory/config.sh is where you override default values. It is source run as a shell script ( . ~/.config/rofiles/config.sh ). Because of this, if you define a function here, it will be available for the program and your custom functions. The script is ran after defaults are defined in the program so you can access them (e.g. mmOptions=$mmOptions,mycustomfun.sh)   
-config-directory/help.txt contains the help message that displays when running this program with the -h option. If the file does not exist, the default help message will be displayed.   
-config-directory/functions is a directory that contains custom functions that you can define.
+#### config-directory/config.sh
+This where you override default values. It is source run as a shell script ( . ~/.config/rofiles/config.sh ). Because of this, if you define a function here, it will be available for the program and your custom functions. The script is ran after defaults are defined in the program so you can access them (e.g. mmOptions=$mmOptions,mycustomfun.sh)   
+#### config-directory/help.txt
+contains the help message that displays when running this program with the -h option. If the file does not exist, the default help message will be displayed.   
+#### config-directory/functions
+This a directory that contains custom functions that you can define. More on that later in this readme.
 
 ### Config Variables
 The variables that can be set in config-directory/config.sh  
