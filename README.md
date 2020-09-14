@@ -1,6 +1,19 @@
 # Rofiles
 a file manager written in dash shell script and uses rofi/dmenu for most of it's interface
 
+
+## main menu options
+ - navigate/open  select a file or directory(ends with /) from the rofi/dmenu. If selected is a file, xdg-open (default application). If it is a directory, go to that directory. The rofi/dmenu selection repeated in a loop that can be escaped by pressing the escape key.
+ - navigate  select a directoy from the rofi/dmenu to go to that directory. The rofi/dmenu selection repeated in a loop that can be escaped by pressing the escape key.
+ - run_sh  select a shell script with suffix .sh with execute permissions to run it.
+ - xdg_open  select a file to open it with default application (xdg-open)
+ - nano  select a file to open it with nano
+ - gedit  select a file to open it with gedit
+ - rofi_view_file  select a file to view it in rofi/dmenu
+ - shell  use terminal shell. To go back to the program, exit the shell
+ - exit  exit the program cleanly
+ - show/hide_hidden_files toggle option to show hidden files
+
 ## Options
 For options that are boolean (true/false), use capital letter to do the opposite   
 e.g. -a   shows hidden files, -A   hides hidden files, i.e. opposites
@@ -8,7 +21,7 @@ e.g. -a   shows hidden files, -A   hides hidden files, i.e. opposites
 For options that require you to specify something, use the argument after to specify   
 e.g. -s zsh   will set shell to zsh
 
-rofiles options:
+### rofiles options:
  - -h : show the help text and exit
  - -a : show hidden files
  - -e : open terminal apps in seperate terminal
@@ -51,18 +64,6 @@ If you made a custom function, for it to be displayed in the main menu, make sur
 ### Want to use actual dmenu instead of rofi
 add this to your config.sh:  
 dmenu=dmenu
-
-## main menu options
- - navigate/open  select a file or directory(ends with /) from the rofi/dmenu. If selected is a file, xdg-open (default application). If it is a directory, go to that directory. The rofi/dmenu selection repeated in a loop that can be escaped by pressing the escape key.
- - navigate  select a directoy from the rofi/dmenu to go to that directory. The rofi/dmenu selection repeated in a loop that can be escaped by pressing the escape key.
- - run_sh  select a shell script with suffix .sh with execute permissions to run it.
- - xdg_open  select a file to open it with default application (xdg-open)
- - nano  select a file to open it with nano
- - gedit  select a file to open it with gedit
- - rofi_view_file  select a file to view it in rofi/dmenu
- - shell  use terminal shell. To go back to the program, exit the shell
- - exit  exit the program cleanly
-
 
 ## Planned Features
  - delete files
