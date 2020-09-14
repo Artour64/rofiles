@@ -1,6 +1,24 @@
 # Rofiles
 a file manager written in dash shell script and uses rofi/dmenu for most of it's interface
 
+## Options
+For options that are boolean (true/false),
+use capital letter to do the opposite
+e.g. -a shows hidden files, -A hides hidden files, i.e. opposites
+
+For options that require you to specify something,
+use the argument after to specify
+e.g. -s zsh will set shell to zsh
+
+rofiles options:
+ -h : show the help text and exit
+ -a : show hidden files
+ -e : open terminal apps in seperate terminal
+ -d : with -e option, terminal apps are detached (termapp params & disown)
+ -q : escape key on main menu exits the program
+ -t : with -e option, what terminal emulator to use for terminal apps
+ -s : shell (bash,zsh,dash,etc) to use for the 'shell' menu option
+
 ## Config
 default config-directory: ~/.config/rofiles  
 #### config-directory/config.sh
