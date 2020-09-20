@@ -1,5 +1,4 @@
 #!/bin/dash
-
 configs=~/.config/rofiles
 
 hasTerm=true
@@ -14,7 +13,10 @@ p=true
 dmenu="rofi -i -dmenu"
 #quiet=true
 
-mmOptions="navigate/open,navigate,run_sh,xdg_open,nano,gedit,rofi_view_file,shell,exit"
+mmOptions="navigate/open,navigate,run_sh,xdg_open,nano,gedit,rofi_view_file,shell,exit,select_files_menu"
+
+submenus="select_files_menu"
+submenu_select_files_menu="Menu options for this menu and functionality coming in future update. Go back with escape key or \"go_back\" menu option"
 #mmPlanned="copy,move"
 
 helpMsg="\
@@ -37,18 +39,20 @@ rofiles options:
  -t : with -e option, what terminal emulator to use for terminal apps
  -s : shell (bash,zsh,dash,etc) to use for the 'shell' menu option\
 "
+
 loadconfig(){
 	if test -d "$configs"; then
-		if test -f "$configs/config.sh"; then
-			. $configs/config.sh
-		fi
 		if test -f "$configs/help.txt"; then
 			helpMsg=$(cat $configs/help.txt)
+		fi
+		if test -f "$configs/config.sh"; then
+			. $configs/config.sh
 		fi
 	fi
 }
 
 loadconfig
+#submenus="$submenus,select_files_menu"
 
 while [ -n "$1" ]; do
 	case "$1" in
@@ -73,6 +77,14 @@ while [ -n "$1" ]; do
 done
 
 #qExit=true
+
+submenu(){
+	local mm="q"
+	while [ -n "$mm" -a "$mm" != "exit" -a "$mm" != "go_back" ]; do
+		mm=$(eval echo $"submenu_$1",go_back | tr ',' '\n' | numberline | menusel "$1" | sed 's/^[0-9]*_//')
+		menuif $mm ""
+	done
+}
 
 menusel(){
 	if [ $p = true ]; then
@@ -146,17 +158,10 @@ customfun() {
 #		$1 $2 & disown
 #	fi
 #}
-aStr=""
-dir=$(pwd)
-while [ $running = true ];do
-	if [ "$a" = "-A" ];then
-		aStr="hide_hidden_files"
-	else
-		aStr="show_hidden_files"
-	fi
- 	mm=$(echo $mmOptions,$aStr | tr ',' '\n' | numberline | menusel "main_menu" | sed 's/^[0-9]*_//')
+menuif(){
+	local mm=$1
  	if [ -z "$mm" ];then
- 		if [ $qExit = true ];then
+ 		if [ $qExit = true -a $# = 0 ];then
 			running=false
 		fi
  	elif [ "$mm" = "navigate" ];then
@@ -198,7 +203,23 @@ while [ $running = true ];do
 		a=""
 	elif [ "$mm" = exit ];then
 		running=false
+	elif [ "$(echo "$submenus" | tr ',' '\n' | grep -c "^$mm$")" = 1 ];then
+		submenu "$mm"
 	else
 		customfun "$mm"
 	fi
+}
+
+aStr=""
+dir=$(pwd)
+
+while [ $running = true ];do
+	if [ "$a" = "-A" ];then
+		aStr="hide_hidden_files"
+	else
+		aStr="show_hidden_files"
+	fi
+ 	m=$(echo $mmOptions,$aStr | tr ',' '\n' | numberline | menusel "main_menu" | sed 's/^[0-9]*_//')
+	menuif $m
 done
+
