@@ -13,7 +13,7 @@ p=true
 dmenu="rofi -i -dmenu"
 #quiet=true
 
-mmOptions="navigate/open,navigate,run_sh,xdg_open,nano,gedit,rofi_view_file,shell,select_files_menu,toggle_hidden,exit"
+mmOptions="navigate/open,navigate,run_sh,xdg_open,nano,gedit,rofi_view_file,shell,select_files_menu,toggle_show_hidden_files,exit"
 
 submenus="select_files_menu"
 submenu_select_files_menu="Menu options for this menu and functionality coming in future update. Go back with escape key or \"go_back\" menu option"
@@ -107,7 +107,7 @@ numberline() {
 togglemenuopt(){
 	if [ "$#" = 0 ] ; then
         while read -r line ; do
-            if [ "$line" = "toggle_hidden" ];then
+            if [ "$line" = "toggle_show_hidden_files" ];then
             	if [ "$a" = "-A" ];then
 					echo "hide_hidden_files"
 				else
