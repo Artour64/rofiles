@@ -13,7 +13,7 @@ p=true
 dmenu="rofi -i -dmenu"
 #quiet=true
 
-mmOptions="navigate/open,navigate,run_sh,xdg_open,nano,gedit,rofi_view_file,shell,exit,select_files_menu"
+mmOptions="navigate/open,navigate,run_sh,xdg_open,nano,gedit,rofi_view_file,shell,select_files_menu,toggle_hidden,exit"
 
 submenus="select_files_menu"
 submenu_select_files_menu="Menu options for this menu and functionality coming in future update. Go back with escape key or \"go_back\" menu option"
@@ -81,7 +81,7 @@ done
 submenu(){
 	local mm="q"
 	while [ -n "$mm" -a "$mm" != "exit" -a "$mm" != "go_back" ]; do
-		mm=$(eval echo $"submenu_$1",go_back | tr ',' '\n' | numberline | menusel "$1" | sed 's/^[0-9]*_//')
+		mm=$(eval echo $"submenu_$1",go_back | tr ',' '\n' | togglemenuopt | numberline | menusel "$1" | sed 's/^[0-9]*_//')
 		menuif $mm ""
 	done
 }
@@ -100,6 +100,22 @@ numberline() {
         while read -r line ; do
             echo "$c"_"${line}"
             c=$((c+1))
+        done
+    fi
+}
+
+togglemenuopt(){
+	if [ "$#" = 0 ] ; then
+        while read -r line ; do
+            if [ "$line" = "toggle_hidden" ];then
+            	if [ "$a" = "-A" ];then
+					echo "hide_hidden_files"
+				else
+					echo "show_hidden_files"
+				fi
+            else
+            	echo "$line"
+            fi
         done
     fi
 }
@@ -219,7 +235,7 @@ while [ $running = true ];do
 	else
 		aStr="show_hidden_files"
 	fi
- 	m=$(echo $mmOptions,$aStr | tr ',' '\n' | numberline | menusel "main_menu" | sed 's/^[0-9]*_//')
+ 	m=$(echo $mmOptions | tr ',' '\n' | togglemenuopt | numberline | menusel "main_menu" | sed 's/^[0-9]*_//')
 	menuif $m
 done
 
