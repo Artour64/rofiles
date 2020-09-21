@@ -2,7 +2,7 @@
 A file manager written in dash shell script and uses rofi/dmenu for most of it's interface.
 
 
-## main menu options
+## Menu Options
  - **navigate/open**  select a file or directory(ends with /) from the rofi/dmenu. If selected is a file, xdg-open (default application). If it is a directory, go to that directory. The rofi/dmenu selection repeated in a loop that can be escaped by pressing the escape key.
  - **navigate**  select a directoy from the rofi/dmenu to go to that directory. The rofi/dmenu selection repeated in a loop that can be escaped by pressing the escape key.
  - **run\_sh** select a shell script with suffix .sh with execute permissions to run it.
@@ -21,7 +21,7 @@ e.g. `-a` shows hidden files, `-A` hides hidden files, i.e. opposites
 For options that require you to specify something, use the argument after to specify  
 e.g. `-s zsh` will set shell to zsh
 
-### rofiles options:
+### Rofiles Options:
  - **-h** : show the help text and exit
  - **-a** : show hidden files
  - **-e** : open terminal apps in seperate terminal
@@ -56,7 +56,7 @@ Format: **variable** (default/other-options) description
  - **helpMsg** (it's too long, sorry) the message to display when running this program with the -h option
 
 ### Custom Functions
-Custom functions are source run (`. yourfun.sh`)  
+Custom functions are source run (`. config-directory/yourfun.sh`)  
 Because of this, they must be written in dash. To go around this, you can change the shebang of this program but this will likely make the program slower.  
 Also, the custom functions can access and change variables in the program. It can also use functions that are present in the program.  
 The program attempts to call a custom function if the selected option in the main menu does not match any built in function or submenu.  
