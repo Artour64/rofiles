@@ -12,7 +12,7 @@ A file manager written in dash shell script and uses rofi/dmenu for most of it's
  - **rofi\_view\_file** select a file to view it in rofi/dmenu
  - **shell** use terminal shell. To go back to the program, exit the shell
  - **exit** exit the program cleanly
- - **toggle_hidden** toggle option to show hidden files. This option is displayed as "show\_hidden\_files" or "hide\_hidden\_files" in the rofi/dmenu menu depending on what the option is currently set on.
+ - **toggle_show_hidden_files** toggle option to show hidden files. This option is displayed as "show\_hidden\_files" or "hide\_hidden\_files" in the rofi/dmenu menu depending on what the option is currently set on.
 
 ## Options
 For options that are boolean (true/false), use capital letter to do the opposite  
