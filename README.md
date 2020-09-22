@@ -56,7 +56,7 @@ Format: **variable** (default/other-options) description
  - **helpMsg** (it's too long, sorry) the message to display when running this program with the -h option
 
 ### Custom Functions
-Custom functions are source run (`. config-directory/yourfun.sh`)  
+Custom functions are source run (`. config-directory/functions/yourfun.sh`)  
 Because of this, they must be written in dash. To go around this, you can change the shebang of this program but this will likely make the program slower.  
 Also, the custom functions can access and change variables in the program. It can also use functions that are present in the program.  
 The program attempts to call a custom function if the selected option in the main menu does not match any built in function or submenu.  
