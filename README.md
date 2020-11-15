@@ -3,6 +3,7 @@ A file manager written in dash shell script and uses rofi/dmenu for most of it's
 
 
 ## Menu Options
+ - **fast_navigate** select a directoy from the rofi/dmenu to go to that directory. Uses `find` instead of `ls`, therefore recursive
  - **navigate/open**  select a file or directory(ends with /) from the rofi/dmenu. If selected is a file, xdg-open (default application). If it is a directory, go to that directory. The rofi/dmenu selection repeated in a loop that can be escaped by pressing the escape key.
  - **navigate**  select a directoy from the rofi/dmenu to go to that directory. The rofi/dmenu selection repeated in a loop that can be escaped by pressing the escape key.
  - **run\_sh** select a shell script with suffix .sh with execute permissions to run it.
@@ -14,21 +15,28 @@ A file manager written in dash shell script and uses rofi/dmenu for most of it's
  - **exit** exit the program cleanly
  - **toggle_show_hidden_files** toggle option to show hidden files. This option is displayed as "show\_hidden\_files" or "hide\_hidden\_files" in the rofi/dmenu menu depending on what the option is currently set on.
 
+## Arguments:
+directory to start in (last specified)
+e.g. `rofiles.sh ~/Documents` will start the program in the `~/Documents` directory
+
 ## Options
 For options that are boolean (true/false), use capital letter to do the opposite  
 e.g. `-a` shows hidden files, `-A` hides hidden files, i.e. opposites
+For the boolean multi-character options, appending `-false` will do the opposite
+e.g. `--show-hidden` shows hidden files, `--show-hidden-false` hides hidden files, i.e. opposites
 
 For options that require you to specify something, use the argument after to specify  
 e.g. `-s zsh` will set shell to zsh
 
 ### Rofiles Options:
- - **-h** : show the help text and exit
- - **-a** : show hidden files
- - **-e** : open terminal apps in seperate terminal
- - **-d** : with -e option, terminal apps are detached (`nohup termemulator termapp params &` (not actual code snippet))
- - **-q** : escape key on main menu exits the program
- - **-t** : with -e option, what terminal emulator to use for terminal apps
- - **-s** : shell (bash,zsh,dash,etc) to use for the 'shell' menu option
+ - **-h, --help** : show the help text and exit
+ - **-a, --show-hidden** : show hidden files
+ - **-e, --separate-terminal** : open terminal apps in seperate terminal
+ - **-d, --detach-term** : with -e option, terminal apps are detached (`nohup termemulator termapp params &` (not actual code snippet))
+ - **-q, --quick-exit** : escape key on main menu exits the program
+ - **-t, --term** : with -e option, what terminal emulator to use for terminal apps
+ - **-s, --shell** : shell (bash,zsh,dash,etc) to use for the 'shell' menu option
+ - **--start-script** : run these commands on start (like config.sh). Overrides config.
 
 ## Config
 default config-directory: `~/.config/rofiles`  
@@ -54,6 +62,7 @@ Format: **variable** (default/other-options) description
  - **mmOptions** ("navigate/open,navigate,run\_sh,xdg\_open,nano,gedit,rofi\_view\_file,shell,exit") the options present in the main menu, separated by "," commas
  - **submenus** ("select\_files\_menu"/"select\_files\_menu,mysubmenu1,mysubmenu2,etc") the submenus that are
  - **helpMsg** (it's too long, sorry) the message to display when running this program with the -h option
+ - **promptOpt** ("-p","--prompt") the option used to specify prompt. For compatability for other dmenu-like programs. For fzf, this should be set to `--prompt`.
 
 ### Custom Functions
 Custom functions are source run (`. config-directory/functions/yourfun.sh`)  
