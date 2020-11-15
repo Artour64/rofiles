@@ -10,10 +10,11 @@ term=kitty
 #term=x-terminal-emulator
 shell=bash
 p=true
+promptOpt="-p"
 dmenu="rofi -i -dmenu"
 #quiet=true
 
-mmOptions="navigate/open,navigate,run_sh,xdg_open,nano,gedit,rofi_view_file,shell,select_files_menu,toggle_show_hidden_files,exit"
+mmOptions="fast_navigate,navigate/open,navigate,run_sh,xdg_open,nano,gedit,rofi_view_file,shell,select_files_menu,toggle_show_hidden_files,exit"
 
 submenus="select_files_menu"
 submenu_select_files_menu="Menu options for this menu and functionality coming in future update. Go back with escape key or \"go_back\" menu option"
@@ -25,19 +26,25 @@ Configs override defaults, options override configs
 For options that are boolean (true/false),
 use capital letter to do the opposite
 e.g. -a shows hidden files, -A hides hidden files, i.e. opposites
+For the boolean multi-character options, appending \"-false\" will do the opposite
+e.g. --show-hidden shows hidden files, --show-hidden-false hides hidden files, i.e. opposites
 
 For options that require you to specify something,
 use the argument after to specify
 e.g. -s zsh will set shell to zsh
 
 rofiles options:
- -h : show the help text and exit
- -a : show hidden files
- -e : open terminal apps in seperate terminal
- -d : with -e option, terminal apps are detached (termapp params & disown)
- -q : escape key on main menu exits the program
- -t : with -e option, what terminal emulator to use for terminal apps
- -s : shell (bash,zsh,dash,etc) to use for the 'shell' menu option\
+ -h, --help : show the help text and exit
+ -a, --show-hidden : show hidden files
+ -e, --separate-terminal : open terminal apps in separate terminal
+ -d, --detach-term : with -e option, terminal apps are detached (termapp params & disown)
+ -q, --quick-exit : escape key on main menu exits the program
+ -t, --term : with -e option, what terminal emulator to use for terminal apps
+ -s, --shell : shell (bash,zsh,dash,etc) to use for the 'shell' menu option
+ --start-script : run these commands on start (like config.sh). Overrides config.
+ 
+arguments: directory to start in (last specified)
+e.g. rofiles.sh ~/Documents will start the program in that ~/Documents directory\
 "
 
 loadconfig(){
@@ -56,22 +63,26 @@ loadconfig
 
 while [ -n "$1" ]; do
 	case "$1" in
-		-h) echo "$helpMsg";exit ;;
+		-h|--help) echo "$helpMsg";exit ;;
 		
-		-e) hasTerm=false ;;
-		-E) hasTerm=true ;;
+		-e|--separate-terminal) hasTerm=false ;;
+		-E|--separate-terminal-false) hasTerm=true ;;
 		
-		-d) termAppDisown=true;;
-		-D) termAppDisown=false;;
+		-d|--detach-term) termAppDisown=true;;
+		-D|--detach-term-false) termAppDisown=false;;
 		
-		-a) a="-A";;
-		-A) a="";;
+		-a|--show-hidden) a="-A";;
+		-A|--show-hidden-false) a="";;
 		
-		-q) qExit=true;;
-		-Q) qExit=false;;
+		-q|--quick-exit) qExit=true;;
+		-Q|--quick-exit-false) qExit=false;;
 		
-		-t) term="$2";;
-		-s) shell="$2";;
+		-t|--term) term="$2";shift;;
+		-s|--shell) shell="$2";shift;;
+		
+		--start-script) eval $2;shift;;
+		
+		*) cd $1;;
 	esac
 	shift
 done
@@ -88,7 +99,7 @@ submenu(){
 
 menusel(){
 	if [ $p = true ]; then
-		(while read -r x; do echo "$x"; done) | $dmenu -p "$@ $a $dir"
+		(while read -r x; do echo "$x"; done) | $dmenu $promptOpt "$@ $a $dir"
 	else
 		(while read -r x; do echo "$x"; done) | $dmenu
 	fi
@@ -159,6 +170,20 @@ navigatecmd() {
 	done
 }
 
+fastnav(){
+	if [ "$a" = "-A" ];then
+		dir=$(find -type d "$@" | sed 's/^..//' | menusel "fast_navigate")
+	else
+		dir=$(find -not -path '*/\.*' -type d \( ! -iname ".*" \)| sed 's/^..//' | menusel "fast_navigate")
+	fi
+	if [ -z "$dir" ];then
+		dir=$(pwd)
+		break
+	fi
+	eval cd "\""$dir"\""
+	dir=$(pwd)
+}
+
 customfun() {
 	if test -d "$configs/functions"; then
 		if test -f "$configs/functions/$mm"; then
@@ -180,6 +205,8 @@ menuif(){
  		if [ $qExit = true -a $# = 0 ];then
 			running=false
 		fi
+	elif [ "$mm" = "fast_navigate" ];then
+		fastnav
  	elif [ "$mm" = "navigate" ];then
  		navigatecmd
  	elif [ "$mm" = "navigate/open" ];then
