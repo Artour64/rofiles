@@ -115,8 +115,6 @@ promptOpt="--prompt"
  - select/deselect multiple files (into a clipboard of sorts) to later open them or do the operations above
  - rename files
  - create files and directories
- - an in terminal selection program as alternative to rofi or dmenu (any recommendations?)
- - start program at specified directory
  - config dump option
  - make installable
  - rofi icons
