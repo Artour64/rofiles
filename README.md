@@ -89,7 +89,8 @@ mmOptions="$mmOptions,submenu3,openfile_menu"
 To go back to main menu (or go to previous submenu if it is a nested submenu), press the escape key or select the "go_back" menu option
 
 
-### Want to use actual dmenu instead of rofi
+### Other Menu Selector Programs
+#### dmenu
 Add this to your config.sh:  
 ```sh
 dmenu="dmenu"
@@ -97,6 +98,13 @@ dmenu="dmenu"
 You can use dmenu options. e.g.: 
 ```sh
 dmenu="dmenu -b -i -l 20"
+```
+
+#### fzf
+Add this to your config.sh:  
+```sh
+dmenu="fzf"
+promptOpt="--prompt"
 ```
 
 ## Planned Features
