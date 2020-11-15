@@ -23,6 +23,9 @@ submenu_select_files_menu="Menu options for this menu and functionality coming i
 helpMsg="\
 Configs override defaults, options override configs
 
+arguments: directory to start in (last specified)
+e.g. rofiles.sh ~/Documents will start the program in the ~/Documents directory
+
 For options that are boolean (true/false),
 use capital letter to do the opposite
 e.g. -a shows hidden files, -A hides hidden files, i.e. opposites
@@ -41,10 +44,7 @@ rofiles options:
  -q, --quick-exit : escape key on main menu exits the program
  -t, --term : with -e option, what terminal emulator to use for terminal apps
  -s, --shell : shell (bash,zsh,dash,etc) to use for the 'shell' menu option
- --start-script : run these commands on start (like config.sh). Overrides config.
- 
-arguments: directory to start in (last specified)
-e.g. rofiles.sh ~/Documents will start the program in that ~/Documents directory\
+ --start-script : run these commands on start (like config.sh). Overrides config.\
 "
 
 loadconfig(){
