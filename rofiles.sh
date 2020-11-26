@@ -58,34 +58,35 @@ loadconfig(){
 	fi
 }
 
-loadconfig
-#submenus="$submenus,select_files_menu"
 
-while [ -n "$1" ]; do
-	case "$1" in
-		-h|--help) echo "$helpMsg";exit ;;
-		
-		-e|--separate-terminal) hasTerm=false ;;
-		-E|--separate-terminal-false) hasTerm=true ;;
-		
-		-d|--detach-term) termAppDisown=true;;
-		-D|--detach-term-false) termAppDisown=false;;
-		
-		-a|--show-hidden) a="-A";;
-		-A|--show-hidden-false) a="";;
-		
-		-q|--quick-exit) qExit=true;;
-		-Q|--quick-exit-false) qExit=false;;
-		
-		-t|--term) term="$2";shift;;
-		-s|--shell) shell="$2";shift;;
-		
-		--start-script) eval $2;shift;;
-		
-		*) cd $1;;
-	esac
-	shift
-done
+#submenus="$submenus,select_files_menu"
+processparams(){
+	while [ -n "$1" ]; do
+		case "$1" in
+			-h|--help) echo "$helpMsg";running=false;exit ;;
+			
+			-e|--separate-terminal) hasTerm=false ;;
+			-E|--separate-terminal-false) hasTerm=true ;;
+			
+			-d|--detach-term) termAppDisown=true;;
+			-D|--detach-term-false) termAppDisown=false;;
+			
+			-a|--show-hidden) a="-A";;
+			-A|--show-hidden-false) a="";;
+			
+			-q|--quick-exit) qExit=true;;
+			-Q|--quick-exit-false) qExit=false;;
+			
+			-t|--term) term="$2";shift;;
+			-s|--shell) shell="$2";shift;;
+			
+			--start-script) eval $2;shift;;
+			
+			*) cd $1;;
+		esac
+		shift
+	done
+}
 
 #qExit=true
 
@@ -253,16 +254,23 @@ menuif(){
 	fi
 }
 
+mainloop(){
+	while [ $running = true ];do
+		if [ "$a" = "-A" ];then
+			aStr="hide_hidden_files"
+		else
+			aStr="show_hidden_files"
+		fi
+	 	m=$(echo $mmOptions | tr ',' '\n' | togglemenuopt | numberline | menusel "main_menu" | sed 's/^[0-9]*_//')
+		menuif $m
+	done
+}
+
+loadconfig
+processparams "$@"
+
 aStr=""
 dir=$(pwd)
+mainloop
 
-while [ $running = true ];do
-	if [ "$a" = "-A" ];then
-		aStr="hide_hidden_files"
-	else
-		aStr="show_hidden_files"
-	fi
- 	m=$(echo $mmOptions | tr ',' '\n' | togglemenuopt | numberline | menusel "main_menu" | sed 's/^[0-9]*_//')
-	menuif $m
-done
 
