@@ -60,33 +60,7 @@ loadconfig(){
 
 
 #submenus="$submenus,select_files_menu"
-processparams(){
-	while [ -n "$1" ]; do
-		case "$1" in
-			-h|--help) echo "$helpMsg";running=false;exit ;;
-			
-			-e|--separate-terminal) hasTerm=false ;;
-			-E|--separate-terminal-false) hasTerm=true ;;
-			
-			-d|--detach-term) termAppDisown=true;;
-			-D|--detach-term-false) termAppDisown=false;;
-			
-			-a|--show-hidden) a="-A";;
-			-A|--show-hidden-false) a="";;
-			
-			-q|--quick-exit) qExit=true;;
-			-Q|--quick-exit-false) qExit=false;;
-			
-			-t|--term) term="$2";shift;;
-			-s|--shell) shell="$2";shift;;
-			
-			--start-script) eval $2;shift;;
-			
-			*) cd $1;;
-		esac
-		shift
-	done
-}
+
 
 #qExit=true
 
@@ -266,11 +240,41 @@ mainloop(){
 	done
 }
 
+
+processparams(){
+	while [ -n "$1" ]; do
+		case "$1" in
+			-h|--help) echo "$helpMsg";running=false;exit ;;
+			
+			-e|--separate-terminal) hasTerm=false ;;
+			-E|--separate-terminal-false) hasTerm=true ;;
+			
+			-d|--detach-term) termAppDisown=true;;
+			-D|--detach-term-false) termAppDisown=false;;
+			
+			-a|--show-hidden) a="-A";;
+			-A|--show-hidden-false) a="";;
+			
+			-q|--quick-exit) qExit=true;;
+			-Q|--quick-exit-false) qExit=false;;
+			
+			-t|--term) term="$2";shift;;
+			-s|--shell) shell="$2";shift;;
+			
+			--start-script) eval $2;shift;;
+			
+			*) cd "$1";;
+		esac
+		shift
+	done
+}
+
 loadconfig
 processparams "$@"
 
 aStr=""
 dir=$(pwd)
+
 mainloop
 
 
