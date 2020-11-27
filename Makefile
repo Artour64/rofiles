@@ -6,7 +6,7 @@ install:
 	cp -f rofiles.sh ${DESTDIR}${PREFIX}/bin/rofiles
 	chmod 755 ${DESTDIR}${PREFIX}/bin/rofiles
 	mkdir -p ${DESTDIR}${MANPREFIX}/man1
-	./rofiles.sh -h > ${DESTDIR}${MANPREFIX}/man1/rofiles.1
+	cp -f rofiles.1 ${DESTDIR}${MANPREFIX}/man1
 	chmod 644 ${DESTDIR}${MANPREFIX}/man1/rofiles.1
 
 uninstall:

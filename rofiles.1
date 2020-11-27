@@ -1,0 +1,54 @@
+.TH Rofiles 1
+.SH NAME
+.B rofiles
+.SH SYNOPSIS
+.B rofiles
+.RB [OPTION]... [FILE]... 
+.SH DESCRIPTION
+A file manager written in dash shell script and uses rofi/dmenu for most of it's interface.
+
+The last non option argument will be interpreted as the directory to start the program in. If non given, the program will start in the current directory.
+.SH OPTIONS
+.TP 8
+-h, --help
+show the help text and exit
+.TP 8
+-a, --show-hidden
+show hidden files
+.TP 8
+-e, --separate-terminal
+open terminal apps in seperate terminal
+.TP 8
+-d, --detach-term
+with -e option, terminal apps are detached (nohup termemulator termapp params & (not actual code snippet))
+.TP 8
+-q, --quick-exit
+escape key on main menu exits the program
+.TP 8
+-t, --term
+with -e option, what terminal emulator to use for terminal apps
+.TP 8
+-s, --shell
+shell (bash,zsh,dash,etc) to use for the 'shell' menu option
+.TP 8
+--start-script
+run these commands on start (like config.sh). Overrides config. Can be used multiple times.
+.SH FILES
+.TP 32
+Default config directory
+~/.config/rofiles
+.TP 32
+config script
+config-directory/config.sh
+.TP 32
+custom help message (-h/--help)
+config-directory/help.txt
+.TP 32
+custom functions directory
+config-directory/functions
+.SH SELL ALSO
+.BR rofi (1),
+.BR dash (1),
+
+ 
+
