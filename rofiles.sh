@@ -13,8 +13,10 @@ p=true
 promptOpt="-p"
 dmenu="rofi -i -dmenu"
 #quiet=true
+favDirs="/,~,~/.config"
+favFiles=""
 
-mmOptions="fast_navigate,navigate/open,navigate,run_sh,xdg_open,nano,gedit,rofi_view_file,shell,select_files_menu,toggle_show_hidden_files,exit"
+mmOptions="fav_nav,fast_navigate,navigate/open,navigate,run_sh,xdg_open,nano,gedit,rofi_view_file,shell,select_files_menu,toggle_show_hidden_files,exit"
 
 submenus="select_files_menu"
 submenu_select_files_menu="Menu options for this menu and functionality coming in future update. Go back with escape key or \"go_back\" menu option"
@@ -153,8 +155,19 @@ fastnav(){
 	fi
 	if [ -z "$dir" ];then
 		dir=$(pwd)
-		break
+		return
 	fi
+	eval cd "\""$dir"\""
+	dir=$(pwd)
+}
+
+fav_nav(){
+	dir=$(echo "$favDirs" | tr ',' '\n' | menusel "navigate_favorites")
+	if [ -z "$dir" ];then
+		dir=$(pwd)
+		return
+	fi
+	dir=$(eval echo $dir)
 	eval cd "\""$dir"\""
 	dir=$(pwd)
 }
@@ -215,6 +228,10 @@ menuif(){
 	elif [ "$mm" = shell ];then
 		termapp $shell
 		dir=$(pwd)
+	elif [ "$mm" = fav_nav ];then
+		fav_nav
+	elif [ "$mm" = fav_open ];then
+		open_fav
 	elif [ "$mm" = show_hidden_files ];then
 		a="-A"
 	elif [ "$mm" = hide_hidden_files ];then
