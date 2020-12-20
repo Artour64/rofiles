@@ -7,6 +7,8 @@ a=""
 qExit=false
 running=true
 term=kitty
+textEditor="gedit"
+terminalTextEditor="nano"
 #term=x-terminal-emulator
 shell=bash
 p=true
@@ -16,7 +18,7 @@ dmenu="rofi -i -dmenu"
 favDirs="~,/,~/.config"
 favFiles=""
 
-mmOptions="fav_nav,fast_navigate,navigate/open,navigate,run_sh,xdg_open,nano,gedit,rofi_view_file,shell,select_files_menu,toggle_show_hidden_files,exit"
+mmOptions="fav_nav,fast_navigate,navigate/open,navigate,run_sh,xdg_open,terminal_text_editor,gui_text_editor,rofi_view_file,shell,select_files_menu,toggle_show_hidden_files,exit"
 
 submenus="select_files_menu"
 submenu_select_files_menu="Menu options for this menu and functionality coming in future update. Go back with escape key or \"go_back\" menu option"
@@ -210,15 +212,15 @@ menuif(){
 		if [ -n "$f" ]; then
 			eval nohup xdg-open 2>/dev/null "\""$f"\"" > /dev/null &
 		fi
-	elif [ "$mm" = nano ];then
+	elif [ "$mm" = terminal_text_editor ];then
 		f=$(ls $a -p | grep -v / | menusel "nano")
 		if [ -n "$f" ]; then
-			termapp nano $f
+			termapp $terminalTextEditor $f
 		fi
-	elif [ "$mm" = gedit ];then
+	elif [ "$mm" = gui_text_editor ];then
 		f=$(ls $a -p | grep -v / | menusel "gedit")
 		if [ -n "$f" ]; then
-			nohup gedit $f > /dev/null &
+			nohup $textEditor $f > /dev/null 2>1 &
 		fi
 	elif [ "$mm" = rofi_view_file ];then
 		f=$(ls $a -p | grep -v / | menusel "rofi_view_file")
