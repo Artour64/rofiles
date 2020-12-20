@@ -13,7 +13,7 @@ p=true
 promptOpt="-p"
 dmenu="rofi -i -dmenu"
 #quiet=true
-favDirs="/,~,~/.config"
+favDirs="~,/,~/.config"
 favFiles=""
 
 mmOptions="fav_nav,fast_navigate,navigate/open,navigate,run_sh,xdg_open,nano,gedit,rofi_view_file,shell,select_files_menu,toggle_show_hidden_files,exit"
