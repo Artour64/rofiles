@@ -182,6 +182,15 @@ customfun() {
 	fi
 }
 
+yesFirst=false
+yesnoprompt(){
+	f="no,yes"
+	if [ "yesFirst" = true ]; then
+		f="yes,no"
+	fi
+	echo "$f" | tr ',' '\n' | menusel "$1"
+}
+
 #function guiapp {
 #	if [ $quiet = true ];then
 #		$1 $2 > /dev/null & disown
@@ -193,6 +202,8 @@ menuif(){
 	local mm=$1
  	if [ -z "$mm" ];then
  		if [ $qExit = true -a $# = 0 ];then
+			running=false
+		elif [ "$(yesnoprompt "Are you sure you want to quit?")" = yes ];then
 			running=false
 		fi
 	elif [ "$mm" = "fast_navigate" ];then
